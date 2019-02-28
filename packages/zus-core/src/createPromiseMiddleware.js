@@ -11,9 +11,8 @@ export default function createPromiseMiddleware(app) {
           ...action,
         });
       });
-    } else {
-      return next(action);
     }
+    return next(action);
   };
 
   function isEffect(type) {

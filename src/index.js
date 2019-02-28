@@ -1,37 +1,23 @@
-import log, { isString, isNode } from 'log-tips';
+import dva from '../packages/dva/src/index';
 
-const app = {};
+// import './index.css';
 
-app.start = start;
+// 1. Initialize
+const app = dva({
+  onError(error) {
+    // 处理全局error
+  },
+});
 
-function start(container) {
-  // 允许 container 是字符串，然后用 querySelector 找元素
-  if (isString(container)) {
-    container = document.querySelector(container);
-    log(container, `container ${container} not found`);
-  }
+// 2. Plugins
+// app.use({ ...createLoading({ effects: true }) });
 
-  // 并且是 HTMLElement
-  invariant(!container || isNode(container), '[app.start] container should be HTMLElement');
+// 3. Model
+// app.model(require("./models/example").default)
 
-  // 路由必须提前注册
-  // invariant(
-  //   app._router,
-  //   `[app.start] router must be registered before app.start()`
-  // )
-  if (!app._store) {
-    oldAppStart.call(app);
-    console.log(app._store, 'app._store');
-  }
-  const store = app._store;
+// 4. Router
+app.router(require('./router').default);
 
-  app._getProvider = getProvider.bind(null, store, app);
+// // 5. Start
 
-  // If has container, render; else, return react component
-  if (container) {
-    render(container, store, app, app._router);
-    app._plugin.apply('onHmr')(render.bind(null, container, store, app));
-  } else {
-    return getProvider(store, this, this._router);
-  }
-}
+app.start('#root');
