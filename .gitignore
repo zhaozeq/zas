@@ -1,11 +1,42 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# editors
+.idea
+.vscode
 
-# dependencies
-/node_modules
-
-# production
-/dist
-
-# misc
+# For macOS 
 .DS_Store
-npm-debug.log*
+
+# For Windows
+thumbs.db
+
+# For NPM
+node_modules/
+npm-debug.log
+npm-debug.log.*
+
+# For git
+!.gitkeep
+
+# For Begg
+coverage/
+logs/
+.logs/
+*-run/
+app/proxy*
+mocks_data/proxy/**/__*
+.idea/
+assembly/
+target/
+app/public/build/
+run/
+coverage/
+cov/
+logs/
+node_modules/
+.node-diamond-client-cache/
+
+
+# Others
+*proxy*
+assembly/
+mocks_data/proxy/**/__*
+

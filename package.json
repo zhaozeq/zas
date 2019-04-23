@@ -1,42 +1,58 @@
 {
   "name": "zus",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "src/index.js",
+  "module": "lib/log-tips.esm.js",
+  "files": [
+    "/lib",
+    "/src"
+  ],
   "scripts": {
-    "dev": "roadhog server",
-    "build": "roadhog build",
-    "lint": "eslint --ext .js src test"
-  },
-  "dependencies": {
-    "log-tips": "^0.0.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
-  },
-  "devDependencies": {
-    "babel-plugin-dva-hmr": "^0.3.2",
-    "eslint": "^5.14.1",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.1.0",
-    "husky": "^0.12.0",
-    "react-redux": "^6.0.1",
-    "react-router-dom": "^4.3.1",
-    "react-router-redux": "^4.0.8",
-    "redbox-react": "^1.4.3",
-    "roadhog": "^2.0.0"
+    "build:clean": "rimraf lib",
+    "build:lib": "yarn rollup --config rollup.config.js",
+    "build": "yarn build:clean && yarn build:lib"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zhaozeq/zas.git"
+    "url": "git+https://github.com/zhaozeq/zus.git"
   },
   "keywords": [
     "zus"
   ],
-  "author": "zhaozeq@foxmail.com",
+  "author": "zhaozeqing",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zhaozeq/zas/issues"
+    "url": "https://github.com/zhaozeq/zus/issues"
   },
-  "homepage": "https://github.com/zhaozeq/zas#readme"
+  "homepage": "https://github.com/zhaozeq/zus#readme",
+  "peerDependencies": {
+    "react": "16.x",
+    "react-dom": "16.x",
+    "redux": "3.x",
+    "redux-saga": "1.x",
+    "react-redux": "^7.x"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "log-tips": "^0.0.5",
+    "rimraf": "^2.6.3",
+    "rollup": "^0.68.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-uglify": "^6.0.2"
+  },
+  "dependencies": {
+    "global": "^4.3.2",
+    "log-tips": "^0.0.6",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.2",
+    "redux": "^4.0.1",
+    "redux-saga": "^1.0.2"
+  }
 }
