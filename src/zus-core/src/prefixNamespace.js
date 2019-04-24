@@ -1,4 +1,5 @@
 import log from 'log-tips'
+import { isArray } from './utils'
 import { NAMESPACE_SEP } from './constants'
 
 function prefix(obj, namespace, type) {
@@ -6,7 +7,7 @@ function prefix(obj, namespace, type) {
     log(
       key.indexOf(`${namespace}${NAMESPACE_SEP}`) !== 0,
       `[prefixNamespace]: ${type} ${key} should not be prefixed with namespace ${namespace}`,
-      'warn'
+      'warn',
     )
     const newKey = `${namespace}${NAMESPACE_SEP}${key}`
     memo[newKey] = obj[key]
@@ -18,7 +19,7 @@ export default function prefixNamespace(model) {
   const { namespace, reducers, effects } = model
 
   if (reducers) {
-    if (Array.isArray(reducers)) {
+    if (isArray(reducers)) {
       model.reducers[0] = prefix(reducers[0], namespace, 'reducer')
     } else {
       model.reducers = prefix(reducers, namespace, 'reducer')

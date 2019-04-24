@@ -1,4 +1,5 @@
-import log, { isFn } from 'log-tips'
+import log from 'log-tips'
+import { isFunction } from './utils'
 import prefixedDispatch from './prefixedDispatch'
 
 export function run(subs, model, app, onError) {
@@ -14,7 +15,7 @@ export function run(subs, model, app, onError) {
         },
         onError
       )
-      if (isFn(unlistener)) {
+      if (isFunction(unlistener)) {
         funcs.push(unlistener)
       } else {
         nonFuncs.push(key)

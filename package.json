@@ -1,17 +1,15 @@
 {
   "name": "zus",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "module": "lib/zus.esm.js",
   "files": [
-    "/lib",
+    "/dist",
     "/src"
   ],
   "scripts": {
-    "build:clean": "rimraf lib",
-    "build:lib": "yarn rollup --config rollup.config.js",
-    "build": "yarn build:clean && yarn build:lib"
+    "build": "umi-lib build"
   },
   "repository": {
     "type": "git",
@@ -35,14 +33,15 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
-    "log-tips": "^0.0.5",
+    "log-tips": "^0.0.6",
     "rimraf": "^2.6.3",
     "rollup": "^0.68.2",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-uglify": "^6.0.2"
+    "rollup-plugin-uglify": "^6.0.2",
+    "umi-library": "^1.4.1"
   },
   "dependencies": {
     "global": "^4.3.2",

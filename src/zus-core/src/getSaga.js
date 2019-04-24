@@ -11,7 +11,7 @@ export default function getSaga(effects, model, onError, onEffect) {
         const watcher = getWatcher(key, effects[key], model, onError, onEffect)
         const task = yield sagaEffects.fork(watcher)
         yield sagaEffects.fork(function*() {
-          yield sagaEffects.take(`${model.namespace}/@CANCEL_EFFECTS`)
+          yield sagaEffects.take(`${model.namespace}/@@CANCEL_EFFECTS`)
           yield sagaEffects.cancel(task)
         })
       }
@@ -46,9 +46,9 @@ function getWatcher(key, _effect, model, onError, onEffect) {
     const { __dva_resolve: resolve = noop, __dva_reject: reject = noop } =
       args.length > 0 ? args[0] : {}
     try {
-      yield sagaEffects.put({ type: `${key}${NAMESPACE_SEP}@start` })
+      yield sagaEffects.put({ type: `${key}${NAMESPACE_SEP}@@start` })
       const ret = yield effect(...args.concat(createEffects(model)))
-      yield sagaEffects.put({ type: `${key}${NAMESPACE_SEP}@end` })
+      yield sagaEffects.put({ type: `${key}${NAMESPACE_SEP}@@end` })
       resolve(ret)
     } catch (e) {
       onError(e, {

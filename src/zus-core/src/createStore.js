@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import log from 'log-tips'
 import window from 'global/window'
-import { returnSelf } from './utils'
+import { returnSelf, isArray } from './utils'
 
 export default ({
   reducers,
@@ -14,7 +14,7 @@ export default ({
   // extra enhancers
   const extraEnhancers = plugin.get('extraEnhancers')
   log(
-    Array.isArray(extraEnhancers),
+    isArray(extraEnhancers),
     `[app.start] extraEnhancers should be array, but got ${typeof extraEnhancers}`
   )
 
@@ -22,7 +22,7 @@ export default ({
   const middlewares = setupMiddlewares([
     promiseMiddleware,
     sagaMiddleware,
-    extraMiddlewares.flat()
+    ...extraMiddlewares.flat()
   ])
 
   const composeEnhancers =
