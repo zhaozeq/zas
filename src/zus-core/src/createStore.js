@@ -18,11 +18,11 @@ export default ({
     `[app.start] extraEnhancers should be array, but got ${typeof extraEnhancers}`
   )
 
-  const extraMiddlewares = plugin.get('onAction')
+  // const extraMiddlewares = plugin.get('onAction') // ===>有问题
   const middlewares = setupMiddlewares([
     promiseMiddleware,
-    sagaMiddleware,
-    ...extraMiddlewares.flat()
+    sagaMiddleware
+    // ...extraMiddlewares.flat()
   ])
 
   const composeEnhancers =

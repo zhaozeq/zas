@@ -1,139 +1,18 @@
+import _objectSpread from '@babel/runtime/helpers/esm/objectSpread';
+import _typeof from '@babel/runtime/helpers/esm/typeof';
 import React from 'react';
 import log, { isFn, isString, isNode } from 'log-tips';
 import { Provider } from 'react-redux';
 import { compose, applyMiddleware, createStore as createStore$1, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import _classCallCheck from '@babel/runtime/helpers/esm/classCallCheck';
+import _createClass from '@babel/runtime/helpers/esm/createClass';
+import _toConsumableArray from '@babel/runtime/helpers/esm/toConsumableArray';
 import window from 'global/window';
+import _regeneratorRuntime from '@babel/runtime/regenerator';
 import * as sagaEffects from 'redux-saga/effects';
 import { fork, take, cancel, takeLatest, throttle, takeEvery, put } from 'redux-saga/effects';
-
-function _typeof(obj) {
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function (obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function (obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
-
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
-    }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
-  }
-
-  return target;
-}
-
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
-}
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
-}
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
-}
-
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-
-function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-}
-
-function _iterableToArrayLimit(arr, i) {
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
-}
-
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
-}
+import _slicedToArray from '@babel/runtime/helpers/esm/slicedToArray';
 
 var isArray = Array.isArray.bind(Array);
 var isFunction = function isFunction(o) {
@@ -402,9 +281,10 @@ var createStore = (function (_ref) {
       setupMiddlewares = _ref$createOpts$setup === void 0 ? returnSelf : _ref$createOpts$setup;
   // extra enhancers
   var extraEnhancers = plugin.get('extraEnhancers');
-  log(isArray(extraEnhancers), "[app.start] extraEnhancers should be array, but got ".concat(_typeof(extraEnhancers)));
-  var extraMiddlewares = plugin.get('onAction');
-  var middlewares = setupMiddlewares([promiseMiddleware, sagaMiddleware].concat(_toConsumableArray(extraMiddlewares.flat())));
+  log(isArray(extraEnhancers), "[app.start] extraEnhancers should be array, but got ".concat(_typeof(extraEnhancers))); // const extraMiddlewares = plugin.get('onAction') // ===>有问题
+
+  var middlewares = setupMiddlewares([promiseMiddleware, sagaMiddleware // ...extraMiddlewares.flat()
+  ]);
   var composeEnhancers = process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
   var enhancers = [applyMiddleware.apply(void 0, _toConsumableArray(middlewares))].concat(_toConsumableArray(extraEnhancers));
   return createStore$1(reducers, initialState, composeEnhancers.apply(void 0, _toConsumableArray(enhancers)));
@@ -424,13 +304,13 @@ function prefixType(type, model) {
 function getSaga(effects, model, onError, onEffect) {
   return (
     /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee3() {
+    _regeneratorRuntime.mark(function _callee3() {
       var key;
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      return _regeneratorRuntime.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.t0 = regeneratorRuntime.keys(effects);
+              _context3.t0 = _regeneratorRuntime.keys(effects);
 
             case 1:
               if ((_context3.t1 = _context3.t0()).done) {
@@ -447,9 +327,9 @@ function getSaga(effects, model, onError, onEffect) {
 
               return _context3.delegateYield(
               /*#__PURE__*/
-              regeneratorRuntime.mark(function _callee2() {
+              _regeneratorRuntime.mark(function _callee2() {
                 var watcher, task;
-                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                return _regeneratorRuntime.wrap(function _callee2$(_context2) {
                   while (1) {
                     switch (_context2.prev = _context2.next) {
                       case 0:
@@ -462,8 +342,8 @@ function getSaga(effects, model, onError, onEffect) {
                         _context2.next = 6;
                         return fork(
                         /*#__PURE__*/
-                        regeneratorRuntime.mark(function _callee() {
-                          return regeneratorRuntime.wrap(function _callee$(_context) {
+                        _regeneratorRuntime.mark(function _callee() {
+                          return _regeneratorRuntime.wrap(function _callee$(_context) {
                             while (1) {
                               switch (_context.prev = _context.next) {
                                 case 0:
@@ -507,7 +387,7 @@ function getSaga(effects, model, onError, onEffect) {
 function getWatcher(key, _effect, model, onError, onEffect) {
   var _marked =
   /*#__PURE__*/
-  regeneratorRuntime.mark(sagaWithCatch);
+  _regeneratorRuntime.mark(sagaWithCatch);
 
   var effect = _effect;
   var type = 'takeEvery';
@@ -536,14 +416,14 @@ function getWatcher(key, _effect, model, onError, onEffect) {
         args,
         _key,
         _ref,
-        _ref$__dva_resolve,
+        _ref$__zus_resolve,
         resolve,
-        _ref$__dva_reject,
+        _ref$__zus_reject,
         reject,
         ret,
         _args4 = arguments;
 
-    return regeneratorRuntime.wrap(function sagaWithCatch$(_context4) {
+    return _regeneratorRuntime.wrap(function sagaWithCatch$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
@@ -551,7 +431,7 @@ function getWatcher(key, _effect, model, onError, onEffect) {
               args[_key] = _args4[_key];
             }
 
-            _ref = args.length > 0 ? args[0] : {}, _ref$__dva_resolve = _ref.__dva_resolve, resolve = _ref$__dva_resolve === void 0 ? noop : _ref$__dva_resolve, _ref$__dva_reject = _ref.__dva_reject, reject = _ref$__dva_reject === void 0 ? noop : _ref$__dva_reject;
+            _ref = args.length > 0 ? args[0] : {}, _ref$__zus_resolve = _ref.__zus_resolve, resolve = _ref$__zus_resolve === void 0 ? noop : _ref$__zus_resolve, _ref$__zus_reject = _ref.__zus_reject, reject = _ref$__zus_reject === void 0 ? noop : _ref$__zus_reject;
             _context4.prev = 2;
             _context4.next = 5;
             return put({
@@ -603,8 +483,8 @@ function getWatcher(key, _effect, model, onError, onEffect) {
     case 'takeLatest':
       return (
         /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee4() {
-          return regeneratorRuntime.wrap(function _callee4$(_context5) {
+        _regeneratorRuntime.mark(function _callee4() {
+          return _regeneratorRuntime.wrap(function _callee4$(_context5) {
             while (1) {
               switch (_context5.prev = _context5.next) {
                 case 0:
@@ -623,8 +503,8 @@ function getWatcher(key, _effect, model, onError, onEffect) {
     case 'throttle':
       return (
         /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee5() {
-          return regeneratorRuntime.wrap(function _callee5$(_context6) {
+        _regeneratorRuntime.mark(function _callee5() {
+          return _regeneratorRuntime.wrap(function _callee5$(_context6) {
             while (1) {
               switch (_context6.prev = _context6.next) {
                 case 0:
@@ -643,8 +523,8 @@ function getWatcher(key, _effect, model, onError, onEffect) {
     default:
       return (
         /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee6() {
-          return regeneratorRuntime.wrap(function _callee6$(_context7) {
+        _regeneratorRuntime.mark(function _callee6() {
+          return _regeneratorRuntime.wrap(function _callee6$(_context7) {
             while (1) {
               switch (_context7.prev = _context7.next) {
                 case 0:
@@ -804,8 +684,8 @@ function createPromiseMiddleware(app) {
         if (isEffect(type)) {
           return new Promise(function (resolve, reject) {
             next(_objectSpread({
-              __dva_resolve: resolve,
-              __dva_reject: reject
+              __zus_resolve: resolve,
+              __zus_reject: reject
             }, action));
           });
         }

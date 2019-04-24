@@ -406,9 +406,10 @@ var createStore = (function (_ref) {
       setupMiddlewares = _ref$createOpts$setup === void 0 ? returnSelf : _ref$createOpts$setup;
   // extra enhancers
   var extraEnhancers = plugin.get('extraEnhancers');
-  log__default(isArray(extraEnhancers), "[app.start] extraEnhancers should be array, but got ".concat(_typeof(extraEnhancers)));
-  var extraMiddlewares = plugin.get('onAction');
-  var middlewares = setupMiddlewares([promiseMiddleware, sagaMiddleware].concat(_toConsumableArray(extraMiddlewares.flat())));
+  log__default(isArray(extraEnhancers), "[app.start] extraEnhancers should be array, but got ".concat(_typeof(extraEnhancers))); // const extraMiddlewares = plugin.get('onAction') // ===>有问题
+
+  var middlewares = setupMiddlewares([promiseMiddleware, sagaMiddleware // ...extraMiddlewares.flat()
+  ]);
   var composeEnhancers = process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : redux.compose;
   var enhancers = [redux.applyMiddleware.apply(void 0, _toConsumableArray(middlewares))].concat(_toConsumableArray(extraEnhancers));
   return redux.createStore(reducers, initialState, composeEnhancers.apply(void 0, _toConsumableArray(enhancers)));
@@ -540,9 +541,9 @@ function getWatcher(key, _effect, model, onError, onEffect) {
         args,
         _key,
         _ref,
-        _ref$__dva_resolve,
+        _ref$__zus_resolve,
         resolve,
-        _ref$__dva_reject,
+        _ref$__zus_reject,
         reject,
         ret,
         _args4 = arguments;
@@ -555,7 +556,7 @@ function getWatcher(key, _effect, model, onError, onEffect) {
               args[_key] = _args4[_key];
             }
 
-            _ref = args.length > 0 ? args[0] : {}, _ref$__dva_resolve = _ref.__dva_resolve, resolve = _ref$__dva_resolve === void 0 ? noop : _ref$__dva_resolve, _ref$__dva_reject = _ref.__dva_reject, reject = _ref$__dva_reject === void 0 ? noop : _ref$__dva_reject;
+            _ref = args.length > 0 ? args[0] : {}, _ref$__zus_resolve = _ref.__zus_resolve, resolve = _ref$__zus_resolve === void 0 ? noop : _ref$__zus_resolve, _ref$__zus_reject = _ref.__zus_reject, reject = _ref$__zus_reject === void 0 ? noop : _ref$__zus_reject;
             _context4.prev = 2;
             _context4.next = 5;
             return sagaEffects.put({
@@ -808,8 +809,8 @@ function createPromiseMiddleware(app) {
         if (isEffect(type)) {
           return new Promise(function (resolve, reject) {
             next(_objectSpread({
-              __dva_resolve: resolve,
-              __dva_reject: reject
+              __zus_resolve: resolve,
+              __zus_reject: reject
             }, action));
           });
         }

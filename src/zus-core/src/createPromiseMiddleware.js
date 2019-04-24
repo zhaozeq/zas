@@ -1,14 +1,14 @@
 import { NAMESPACE_SEP } from './constants'
 
 export default function createPromiseMiddleware(app) {
-  return () => next => (action) => {
+  return () => next => action => {
     const { type } = action
     if (isEffect(type)) {
       return new Promise((resolve, reject) => {
         next({
-          __dva_resolve: resolve,
-          __dva_reject: reject,
-          ...action,
+          __zus_resolve: resolve,
+          __zus_reject: reject,
+          ...action
         })
       })
     }

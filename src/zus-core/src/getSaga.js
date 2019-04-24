@@ -43,7 +43,7 @@ function getWatcher(key, _effect, model, onError, onEffect) {
   function noop() {}
 
   function* sagaWithCatch(...args) {
-    const { __dva_resolve: resolve = noop, __dva_reject: reject = noop } =
+    const { __zus_resolve: resolve = noop, __zus_reject: reject = noop } =
       args.length > 0 ? args[0] : {}
     try {
       yield sagaEffects.put({ type: `${key}${NAMESPACE_SEP}@@start` })
