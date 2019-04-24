@@ -1,9 +1,9 @@
 {
   "name": "zus",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
-  "module": "lib/log-tips.esm.js",
+  "module": "lib/zus.esm.js",
   "files": [
     "/lib",
     "/src"
@@ -29,9 +29,7 @@
   "peerDependencies": {
     "react": "16.x",
     "react-dom": "16.x",
-    "redux": "3.x",
-    "redux-saga": "1.x",
-    "react-redux": "^7.x"
+    "redux": "3.x"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
