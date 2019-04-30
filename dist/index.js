@@ -1,11 +1,15 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var React = _interopDefault(require('react'));
+var React = require('react');
+var React__default = _interopDefault(React);
 var log = require('log-tips');
 var log__default = _interopDefault(log);
 var reactRedux = require('react-redux');
+var ReactDOM = _interopDefault(require('react-dom'));
 var redux = require('redux');
 var createSagaMiddleware = _interopDefault(require('redux-saga'));
 var window = _interopDefault(require('global/window'));
@@ -81,6 +85,53 @@ function _objectSpread(target) {
   return target;
 }
 
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
@@ -138,6 +189,129 @@ function _nonIterableSpread() {
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance");
 }
+
+var cached = {};
+
+function registerModel(app, model) {
+  model = model.default || model;
+
+  if (!cached[model.namespace]) {
+    app.model(model);
+    cached[model.namespace] = 1;
+  }
+}
+
+var defaultLoadingComponent = function defaultLoadingComponent() {
+  return null;
+};
+
+function asyncComponent(config) {
+  var resolve = config.resolve;
+  return (
+    /*#__PURE__*/
+    function (_Component) {
+      _inherits(DynamicComponent, _Component);
+
+      function DynamicComponent() {
+        var _getPrototypeOf2;
+
+        var _this;
+
+        _classCallCheck(this, DynamicComponent);
+
+        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(DynamicComponent)).call.apply(_getPrototypeOf2, [this].concat(args)));
+        _this.LoadingComponent = config.LoadingComponent || defaultLoadingComponent;
+        _this.state = {
+          AsyncComponent: null
+        };
+
+        _this.load();
+
+        return _this;
+      }
+
+      _createClass(DynamicComponent, [{
+        key: "componentDidMount",
+        value: function componentDidMount() {
+          this.mounted = true;
+        }
+      }, {
+        key: "componentWillUnmount",
+        value: function componentWillUnmount() {
+          this.mounted = false;
+        }
+      }, {
+        key: "load",
+        value: function load() {
+          var _this2 = this;
+
+          resolve().then(function (m) {
+            var AsyncComponent = m.default || m;
+
+            if (_this2.mounted) {
+              _this2.setState({
+                AsyncComponent: AsyncComponent
+              });
+            } else {
+              _this2.state.AsyncComponent = AsyncComponent; // eslint-disable-line
+            }
+          });
+        }
+      }, {
+        key: "render",
+        value: function render() {
+          var AsyncComponent = this.state.AsyncComponent;
+          var LoadingComponent = this.LoadingComponent;
+          if (AsyncComponent) return React__default.createElement(AsyncComponent, this.props);
+          return React__default.createElement(LoadingComponent, this.props);
+        }
+      }]);
+
+      return DynamicComponent;
+    }(React.Component)
+  );
+}
+
+function dynamic(config) {
+  var app = config.app,
+      resolveModels = config.models,
+      resolveComponent = config.component;
+  return asyncComponent(_objectSpread({
+    resolve: config.resolve || function () {
+      var models = typeof resolveModels === 'function' ? resolveModels() : [];
+      var component = resolveComponent();
+      return new Promise(function (resolve) {
+        Promise.all([].concat(_toConsumableArray(models), [component])).then(function (ret) {
+          if (!models || !models.length) {
+            return resolve(ret[0]);
+          }
+
+          var len = models.length;
+          ret.slice(0, len).forEach(function (m) {
+            m = m.default || m;
+
+            if (!Array.isArray(m)) {
+              m = [m];
+            }
+
+            m.map(function (_) {
+              return registerModel(app, _);
+            });
+          });
+          return resolve(ret[len]);
+        });
+      });
+    }
+  }, config));
+}
+
+dynamic.setDefaultLoadingComponent = function (LoadingComponent) {
+  defaultLoadingComponent = LoadingComponent;
+};
 
 var isArray = Array.isArray.bind(Array);
 var isFunction = function isFunction(o) {
@@ -860,8 +1034,8 @@ function run(subs, model, app, onError) {
     if (Object.prototype.hasOwnProperty.call(subs, key)) {
       var sub = subs[key];
       var unlistener = sub({
-        dispatch: prefixedDispatch(app._store.dispatch, model),
-        history: app._history
+        dispatch: prefixedDispatch(app._store.dispatch, model) // history: app._history
+
       }, onError);
 
       if (isFunction(unlistener)) {
@@ -1261,11 +1435,10 @@ function zus() {
 
 function getProvider(store, app, router) {
   var DvaRoot = function DvaRoot(extraProps) {
-    return React.createElement(reactRedux.Provider, {
+    return React__default.createElement(reactRedux.Provider, {
       store: store
     }, router(_objectSpread({
-      app: app,
-      history: app._history
+      app: app
     }, extraProps)));
   };
 
@@ -1273,10 +1446,8 @@ function getProvider(store, app, router) {
 }
 
 function render(container, store, app, router) {
-  var ReactDOM = require('react-dom'); // eslint-disable-line
-
-
-  ReactDOM.render(React.createElement(getProvider(store, app, router)), container);
+  ReactDOM.render(React__default.createElement(getProvider(store, app, router)), container);
 }
 
-module.exports = zus;
+exports.default = zus;
+exports.dynamic = dynamic;

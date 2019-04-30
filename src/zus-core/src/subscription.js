@@ -10,8 +10,8 @@ export function run(subs, model, app, onError) {
       const sub = subs[key]
       const unlistener = sub(
         {
-          dispatch: prefixedDispatch(app._store.dispatch, model),
-          history: app._history
+          dispatch: prefixedDispatch(app._store.dispatch, model)
+          // history: app._history
         },
         onError
       )
