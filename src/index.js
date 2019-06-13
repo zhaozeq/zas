@@ -1,6 +1,6 @@
 import React from 'react'
 import log, { isString, isNode, isFn } from 'log-tips'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import dynamic from './dynamic'
 import createZus from './zus-core/src'
@@ -65,4 +65,4 @@ function render(container, store, app, router) {
   )
 }
 
-export { zus as default, dynamic }
+export { zus as default, dynamic, connect }

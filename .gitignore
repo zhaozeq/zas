@@ -36,6 +36,7 @@ node_modules/
 
 
 # Others
+lib/
 *proxy*
 assembly/
 mocks_data/proxy/**/__*
