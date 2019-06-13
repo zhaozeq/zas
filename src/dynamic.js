@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 import React, { Component } from 'react'
 
 const cached = {}
@@ -20,7 +19,7 @@ function asyncComponent(config) {
       super(...args)
       this.LoadingComponent = config.LoadingComponent || defaultLoadingComponent
       this.state = {
-        AsyncComponent: null,
+        AsyncComponent: null
       }
       this.load()
     }
@@ -34,12 +33,12 @@ function asyncComponent(config) {
     }
 
     load() {
-      resolve().then((m) => {
+      resolve().then(m => {
         const AsyncComponent = m.default || m
         if (this.mounted) {
           this.setState({ AsyncComponent })
         } else {
-          this.state.AsyncComponent = AsyncComponent // eslint-disable-line
+          this.state.AsyncComponent = AsyncComponent
         }
       })
     }
@@ -59,16 +58,17 @@ export default function dynamic(config) {
   return asyncComponent({
     resolve:
       config.resolve ||
-      function () {
-        const models = typeof resolveModels === 'function' ? resolveModels() : []
+      function() {
+        const models =
+          typeof resolveModels === 'function' ? resolveModels() : []
         const component = resolveComponent()
-        return new Promise((resolve) => {
-          Promise.all([...models, component]).then((ret) => {
+        return new Promise(resolve => {
+          Promise.all([...models, component]).then(ret => {
             if (!models || !models.length) {
               return resolve(ret[0])
             }
             const len = models.length
-            ret.slice(0, len).forEach((m) => {
+            ret.slice(0, len).forEach(m => {
               m = m.default || m
               if (!Array.isArray(m)) {
                 m = [m]
@@ -79,10 +79,10 @@ export default function dynamic(config) {
           })
         })
       },
-    ...config,
+    ...config
   })
 }
 
-dynamic.setDefaultLoadingComponent = (LoadingComponent) => {
+dynamic.setDefaultLoadingComponent = LoadingComponent => {
   defaultLoadingComponent = LoadingComponent
 }

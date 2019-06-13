@@ -2,14 +2,11 @@
   "name": "zus",
   "version": "1.1.0",
   "description": "",
-  "main": "dist/index.esm.js",
+  "main": "lib/index.js",
   "files": [
-    "/dist",
+    "/lib",
     "/src"
   ],
-  "scripts": {
-    "build": "umi-lib build"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhaozeq/zus.git"
@@ -23,16 +20,27 @@
     "url": "https://github.com/zhaozeq/zus/issues"
   },
   "homepage": "https://github.com/zhaozeq/zus#readme",
+  "scripts": {
+    "build": "BABEL_DISABLE_CACHE=1 node scripts/build.js",
+    "p": "npm version patch && npm publish"
+  },
   "peerDependencies": {
     "react": "16.x",
     "react-dom": "16.x",
     "redux": "3.x"
   },
   "devDependencies": {
-    "umi-library": "^1.4.1"
+    "@babel/preset-react": "^7.0.0",
+    "vinyl-fs": "^3.0.3"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.3",
+    "@babel/runtime": "^7.4.5",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-do-expressions": "^7.2.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
     "global": "^4.3.2",
     "log-tips": "^0.0.6",
     "react": "^16.8.6",
