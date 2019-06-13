@@ -34,13 +34,13 @@
     "vinyl-fs": "^3.0.3"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.5",
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-proposal-do-expressions": "^7.2.0",
     "@babel/plugin-proposal-export-default-from": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
+    "@babel/runtime": "^7.4.5",
     "global": "^4.3.2",
     "log-tips": "^0.0.6",
     "react": "^16.8.6",
