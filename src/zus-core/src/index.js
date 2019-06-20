@@ -27,14 +27,14 @@ const zusModel = {
 }
 
 /**
- * Create dva-core instance.
+ * Create zus-core instance.
  *
  * @param hooksAndOpts
  * @param createOpts
  */
 export default function create(hooksAndOpts = {}, createOpts = {}) {
-  // 解析了createOpts => initialReducer/set upApp
-  const { initialReducer, setupApp = noop } = createOpts
+  // 解析了createOpts => set upApp
+  const { setupApp = noop } = createOpts
 
   const plugin = new Plugin()
   plugin.use(filterHooks(hooksAndOpts)) // 在定义的hooks中加入全局的配置
@@ -111,7 +111,7 @@ export default function create(hooksAndOpts = {}, createOpts = {}) {
     delete store.asyncReducers[namespace]
     delete reducers[namespace]
     store.replaceReducer(createReducer())
-    store.dispatch({ type: '@@dva/UPDATE' })
+    store.dispatch({ type: '@@zus/UPDATE' })
 
     // Cancel effects
     store.dispatch({ type: `${namespace}/@@CANCEL_EFFECTS` })
@@ -126,7 +126,7 @@ export default function create(hooksAndOpts = {}, createOpts = {}) {
   /**
    * Replace a model if it exsits, if not, add it to app
    * Attention:
-   * - Only available after dva.start gets called
+   * - Only available after zus.start gets called
    * - Will not check origin m is strict equal to the new one
    * Useful for HMR
    * @param createReducer
@@ -161,7 +161,7 @@ export default function create(hooksAndOpts = {}, createOpts = {}) {
     // add new version model to store
     app.model(m)
 
-    store.dispatch({ type: '@@dva/UPDATE' })
+    store.dispatch({ type: '@@zus/UPDATE' })
   }
 
   /**
@@ -187,7 +187,7 @@ export default function create(hooksAndOpts = {}, createOpts = {}) {
     app._getSaga = getSaga.bind(null)
 
     const sagas = []
-    const reducers = { ...initialReducer }
+    const reducers = {}
     for (const m of app._models) {
       reducers[m.namespace] = getReducer(
         m.reducers,
