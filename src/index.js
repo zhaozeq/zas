@@ -52,10 +52,10 @@ function zus(opts = {}) {
 }
 
 function getProvider(store, app, router) {
-  const DvaRoot = extraProps => (
+  const Root = extraProps => (
     <Provider store={store}>{router({ app, ...extraProps })}</Provider>
   )
-  return DvaRoot
+  return Root
 }
 
 function render(container, store, app, router) {
