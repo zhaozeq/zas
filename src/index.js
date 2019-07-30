@@ -1,12 +1,19 @@
 import React from 'react'
 import log, { isString, isNode, isFn } from 'log-tips'
+import createHashHistory from 'history/createHashHistory'
 import { Provider, connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import dynamic from './dynamic'
 import createZus from './zus-core/src'
 
 function zus(opts = {}) {
-  const app = createZus(opts, {})
+  const history = opts.history || createHashHistory()
+  const createOpts = {
+    setupApp(app) {
+      app._history = patchHistory(history)
+    }
+  }
+  const app = createZus(opts, createOpts)
   const oldAppStart = app.start
   app.router = router
   app.start = start
@@ -63,6 +70,15 @@ function render(container, store, app, router) {
     React.createElement(getProvider(store, app, router)),
     container
   )
+}
+
+function patchHistory(history) {
+  const oldListen = history.listen
+  history.listen = callback => {
+    callback(history.location)
+    return oldListen.call(history, callback)
+  }
+  return history
 }
 
 export { zus as default, dynamic, connect }
