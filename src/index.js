@@ -1,6 +1,6 @@
 import React from 'react'
 import log, { isString, isNode, isFn } from 'log-tips'
-import createHashHistory from 'history/createHashHistory'
+import { createHashHistory } from 'history'
 import { Provider, connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import dynamic from './dynamic'
